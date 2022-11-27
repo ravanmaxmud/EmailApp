@@ -1,0 +1,28 @@
+﻿@using EmailApp.ViewModels
+@model List<ListViewModel>
+
+<div>
+    <a asp-controller="natification" asp-action="add" class="btn btn-primary">Send Email</a>
+</div>
+<table class="table table-striped mb-0">
+    <thead>
+        <tr>
+            <th scope="col">From Email</th>
+            <th scope="col">TargetEmail</th>
+            <th scope="col">Title</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var n in Model)
+        {
+            <tr>
+
+                <td>@n.FromEmail</td>
+                <td>@n.TargetEmail</td>
+                <td>@n.Title</td>
+            </tr>
+        }
+
+    </tbody>
+</table>

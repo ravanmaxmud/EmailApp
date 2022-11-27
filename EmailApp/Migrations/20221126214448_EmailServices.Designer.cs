@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmailApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221126134132_Natification")]
-    partial class Natification
+    [Migration("20221126214448_EmailServices")]
+    partial class EmailServices
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,13 +73,13 @@ namespace EmailApp.Migrations
 
             modelBuilder.Entity("EmailApp.Controllers.Models.Natification", b =>
                 {
-                    b.HasOne("EmailApp.Controllers.Models.TargetEmail", "TargetEmail")
+                    b.HasOne("EmailApp.Controllers.Models.TargetEmail", "Email")
                         .WithMany("Natifications")
                         .HasForeignKey("TargetEmailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TargetEmail");
+                    b.Navigation("Email");
                 });
 
             modelBuilder.Entity("EmailApp.Controllers.Models.TargetEmail", b =>
