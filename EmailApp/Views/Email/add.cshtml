@@ -1,14 +1,17 @@
 ﻿@using EmailApp.ViewModels
 @model AddViewModel
 
+
+
 <form method="post" asp-controller="natification" asp-action="add">
+    Individual: @Html.RadioButtonFor(model => model.IsBulk,"true")
+    Bulk: @Html.RadioButtonFor(model => model.IsBulk,"false")
     <div class="form-group">
-        <label asp-for="FromEmail">Email address</label>
-        <input asp-for="FromEmail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        <input type="hidden" readonly asp-for="FromEmail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
     </div>
     <div class="form-group">
         <label asp-for="Email.Email">Email address</label>
-        <input asp-for="Email.Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        <input  asp-for="Email.Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
     </div>
     <div class="form-group">
         <label asp-for="Title">Password</label>

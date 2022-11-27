@@ -4,6 +4,8 @@ using EmailApp.EmailServices;
 using EmailApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
+using System.Net.Mail;
 
 namespace EmailApp.Controllers
 {
@@ -13,11 +15,13 @@ namespace EmailApp.Controllers
         private readonly IEmailSender _emailSender;
 
         private readonly DataContext _dataContext;
+        private readonly EmailConfiguration _configuration;
 
-        public NatificationController(DataContext dataContext,IEmailSender emailSender)
+        public NatificationController(DataContext dataContext,IEmailSender emailSender, EmailConfiguration configuration)
         {
             _dataContext = dataContext;
             _emailSender = emailSender;
+            _configuration = configuration;
         }
 
         [HttpGet("~/")]
@@ -39,25 +43,41 @@ namespace EmailApp.Controllers
         }
 
 
-        [HttpPost("add",Name = "email-add")]
-        public IActionResult Add([FromForm]AddViewModel model)
+        [HttpPost("add", Name = "email-add")]
+        public IActionResult Add([FromForm] AddViewModel model)
         {
             var email = new Natification
             {
-                FromEmail = model.FromEmail,
+                FromEmail = _configuration.FromEmail,
                 Email = model.Email,
                 Title = model.Title,
                 Content = model.Content
             };
+            List<string> emailAdress = new List<string>();
 
-            var message = new Message(new string[] {email.Email.Email},email.Title,email.Content);
+            if (model.IsBulk == true)
+            {
+                emailAdress.Add(model.Email.Email);
+            }
+            else
+            {
+                var mails = model.Email.Email.Split(',');
+          
+
+                foreach (var mail in mails)
+                {
+                    emailAdress.Add(mail);
+                }
+
+            }
+            var message = new Message(emailAdress, email.Title, email.Content);
 
             _dataContext.natifications.Add(email);
             _emailSender.SendEmail(message);
             _dataContext.targetEmails.Add(email.Email);
+
             _dataContext.SaveChanges();
             return RedirectToAction(nameof(List));
         }
-
     }
 }

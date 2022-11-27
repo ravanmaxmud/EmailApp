@@ -23,7 +23,7 @@ namespace EmailApp.EmailServices
         private MimeMessage CreateEmailMessage(Message message) 
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(_configuration.FromEmail));
+            emailMessage.From.Add(new MailboxAddress(String.Empty,_configuration.FromEmail));
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Title;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = message.Content };
